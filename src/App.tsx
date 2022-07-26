@@ -3,31 +3,37 @@ import reactLogo from './assets/react.svg'
 import './App.css'
 import { chunk } from 'lodash'
 import { compute } from './method'
-// import { socket } from './ws'
+// import { ws, msg } from './ws'
+import { useWebSocket } from './hooks/useWebSocket'
+import { useEffectOnce } from 'react-use'
+
 
 // socket.connect()
 const randomKey = Math.random().toString(16).slice(2,-1) 
-const ws = new WebSocket(`ws://192.168.43.77:9001/ws/${randomKey}`);
+// const ws = new WebSocket(`ws://192.168.43.77:9001/ws/${randomKey}`);
 
 
 
-console.log('ws连接状态：' + ws.readyState);
+// console.log('ws连接状态：' + ws.readyState);
 
 function App() {
   const [boardInfo, setBoardInfo] = useState<Array<Grid>>([])
   const [lastBoardInfo, setLastBoardInfo] = useState<Array<Grid>>([])
   const [size, setSize] = useState<number>(12)
   const [successNum, setSuccessNum] = useState<number>(5)
-  const [success, setSuccess]  =useState<boolean>(false)
+  const [success, setSuccess]  = useState<boolean>(false)
   const [WSString, setWSString] = useState<string>('')
+
+  const { status } = useWebSocket(`ws://192.168.43.77:9001/ws/${randomKey}`)
+  
+  console.log(status,'statusstatus');
 
 
   const sendMsg = () => {
     console.log(WSString,'WSString');
     
-    ws.send(WSString)
+    // send(WSString)
   }
-  
 
   function init() {
     let gridArr: Grid[] = []
@@ -100,7 +106,7 @@ function App() {
 
   return (
     <div className=" absolute flex-col left-0 right-0 top-0 bottom-0 flex justify-center items-center">
-      <h1 className='text-15 '>五子棋公开赛</h1>
+      <h1 className=' text-zinc-50 font-bold text-3xl'>{JSON.stringify(1)}</h1>
       <button
         className='w-40 
         h-16 
