@@ -1,4 +1,4 @@
-import React ,{ useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 import { chunk } from 'lodash'
@@ -6,10 +6,12 @@ import { compute } from './method'
 // import { ws, msg } from './ws'
 import { useWebSocket } from './hooks/useWebSocket'
 import { useEffectOnce } from 'react-use'
+import { useLocalStorageState, useMount } from 'ahooks'
 
 
 // socket.connect()
 const randomKey = Math.random().toString(16).slice(2,-1) 
+
 // const ws = new WebSocket(`ws://192.168.43.77:9001/ws/${randomKey}`);
 
 
@@ -24,16 +26,26 @@ function App() {
   const [success, setSuccess]  = useState<boolean>(false)
   const [WSString, setWSString] = useState<string>('')
 
-  const { status } = useWebSocket(`ws://192.168.43.77:9001/ws/${randomKey}`)
-  
-  console.log(status,'statusstatus');
+  const [wsKey, setWsKey] = useLocalStorageState('wsKey',{
+    defaultValue: randomKey
+  })
 
+  const { status, data, send } = useWebSocket(`ws://192.168.43.77:9001/ws/${wsKey}`,{
+    autoReconnect: true,
+    heartbeat: {
+      message: Math.random().toString(16).slice(2,-1),
+      interval: 3000
+    }
+  })
 
   const sendMsg = () => {
-    console.log(WSString,'WSString');
-    
-    // send(WSString)
+    send(JSON.stringify({msg: WSString,key: randomKey}))
   }
+
+
+  console.log(status,'status');
+
+  useMount(() => {setWsKey(randomKey)})
 
   function init() {
     let gridArr: Grid[] = []
@@ -106,7 +118,7 @@ function App() {
 
   return (
     <div className=" absolute flex-col left-0 right-0 top-0 bottom-0 flex justify-center items-center">
-      <h1 className=' text-zinc-50 font-bold text-3xl'>{JSON.stringify(1)}</h1>
+      <h1 className=' text-zinc-50 font-bold text-3xl'>{JSON.stringify(data)}{status}</h1>
       <button
         className='w-40 
         h-16 

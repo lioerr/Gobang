@@ -7,7 +7,7 @@ const randomKey = Math.random().toString(16).slice(2,-1)
 let message: any
 
 
-export const ws = new WebSocket(`ws://192.168.43.77:9001/ws/123`);
+export const ws = new WebSocket(`ws://192.168.10.44:9001/ws/123`);
 
 ws.onmessage = e => {
     console.log(e,'eeeeeeeee');
