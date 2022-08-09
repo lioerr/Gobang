@@ -2,10 +2,11 @@
 @tailwind components;
 @tailwind utilities; */
 
+@import "./init.css";
+@import "antd/dist/antd.css";
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-@import "./init.css";
 
 body {
   width: 100%;
